@@ -19,9 +19,6 @@ public class Customer {
         return username;
     }
 
-    public void setUsername(String username) throws Exception {
-        this.username = username;
-    }
 
     public String getPIN() {
         return PIN;

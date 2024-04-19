@@ -16,7 +16,7 @@ public class ATMSystem {
                 customers = new ArrayList<>();
                 currentLogged = null;
                 scanner = new Scanner(System.in);
-                loginAttempts = 0;
+                loginAttempts = 1;
         }
 
         public void start() throws Exception {
@@ -127,11 +127,11 @@ public class ATMSystem {
         private void login() throws Exception {
                 System.out.println("ENTER USERNAME");
                 String username = scanner.nextLine();
-                while (!checkUsernameForLogin(username)){
+                while (!checkUsernameIfExistsByLogin(username)){
                         username = scanner.nextLine();
                         loginAttempts++;
                         if(loginAttempts >= MAX_LOGIN_ATTEMPTS){
-                                loginAttempts = 0;
+                                loginAttempts = 1;
                                 System.out.println("----------------------------------------");
                                 System.out.println("Maximum login attempts exceeded. Please register.");
                                 System.out.println("----------------------------------------");
@@ -145,7 +145,10 @@ public class ATMSystem {
                         pin = scanner.nextLine();
                         loginAttempts++;
                         if(loginAttempts >= MAX_LOGIN_ATTEMPTS){
-                                loginAttempts = 0;
+                                loginAttempts = 1;
+                                System.out.println("----------------------------------------");
+                                System.out.println("Maximum login attempts exceeded. Please try later.");
+                                System.out.println("----------------------------------------");
                                 start();
                         }
                 }
@@ -198,7 +201,7 @@ public class ATMSystem {
                 System.out.println("----------------------------------------");
         }
 
-        public static boolean isNumeric(String strNum) {
+        private static boolean isNumeric(String strNum) {
                 if (strNum == null) {
                         return false;
                 }
@@ -263,7 +266,7 @@ public class ATMSystem {
                         System.out.println("----------------------------------------");
                         return false;
                 }
-                if(customers.stream().anyMatch(c -> c.getUsername().equals(username))){
+                if(findCustomerByUsername(username) != null){
                         System.out.println("----------------------------------------");
                         System.out.println("Try again!Username already exists!");
                         System.out.println("----------------------------------------");
@@ -272,8 +275,8 @@ public class ATMSystem {
                 return true;
         }
 
-        private boolean checkUsernameForLogin(String username){
-                if(customers.stream().anyMatch(c -> c.getUsername().equals(username))){
+        private boolean checkUsernameIfExistsByLogin(String username){
+                if(findCustomerByUsername(username) != null){
                         return true;
                 }
                 System.out.println("----------------------------------------");
@@ -281,6 +284,4 @@ public class ATMSystem {
                 System.out.println("----------------------------------------");
                 return false;
         }
-
-
 }
